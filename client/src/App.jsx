@@ -26,7 +26,8 @@ function App() {
         setError("Something went wrong on the server");
       }
       const data = await res.json();
-      console.log(data);
+
+      setShortenedUrl(`${api_url}/${data.shortCode}`);
     } catch (error) {
       setError(error.message);
     } finally {
