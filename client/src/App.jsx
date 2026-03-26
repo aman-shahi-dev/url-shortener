@@ -8,6 +8,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const api_url = import.meta.env.VITE_API_BASE_URL;
+  const frontend_url = import.meta.env.VITE_FRONTEND_URL;
 
   const handleGenerate = async () => {
     if (!url) return;
@@ -29,9 +30,9 @@ function App() {
       const data = await res.json();
 
       if (data.message === "URL already exists in database") {
-        setShortenedUrl(`${api_url}/${data.existingUrl.shortCode}`);
+        setShortenedUrl(`${frontend_url}/${data.existingUrl.shortCode}`);
       } else {
-        setShortenedUrl(`${api_url}/${data.shortCode}`);
+        setShortenedUrl(`${frontend_url}/${data.shortCode}`);
       }
     } catch (error) {
       setError(error.message);
