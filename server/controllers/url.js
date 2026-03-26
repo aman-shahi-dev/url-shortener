@@ -74,7 +74,7 @@ async function handleVisitRedirectURL(req, res) {
 
     let destinationUrl = entry.url;
     if (
-      !destinationUrl.startsWith("http://") ||
+      !destinationUrl.startsWith("http://") &&
       !destinationUrl.startsWith("https://")
     ) {
       destinationUrl = "http://" + destinationUrl;
