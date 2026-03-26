@@ -64,13 +64,22 @@ async function handleVisitRedirectURL(req, res) {
       });
     }
 
-    return res.status(200).json({
-      id: entry._id,
-      url: entry.url,
-      shortCode: entry.shortCode,
-      createdAt: entry.createdAt,
-      updatedAt: entry.updatedAt,
-    });
+    // return res.status(200).json({
+    //   id: entry._id,
+    //   url: entry.url,
+    //   shortCode: entry.shortCode,
+    //   createdAt: entry.createdAt,
+    //   updatedAt: entry.updatedAt,
+    // });
+
+    let destinationUrl = entry.url;
+    if (
+      !destinationUrl.startsWith("http://") ||
+      !destinationUrl.startsWith("https://")
+    ) {
+      destinationUrl = "http://" + destinationUrl;
+    }
+    res.redirect(destinationUrl);
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
