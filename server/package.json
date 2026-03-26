@@ -7,9 +7,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index"
+    "start": "node index"
   },
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "mongoose": "^9.3.2",
