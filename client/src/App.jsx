@@ -4,6 +4,7 @@ function App() {
   const [url, setUrl] = useState("");
   const [shortendUrl, setShortenedUrl] = useState("");
   const [error, setError] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const api_url = import.meta.env.VITE_API_BASE_URL;
@@ -27,7 +28,11 @@ function App() {
       }
       const data = await res.json();
 
-      setShortenedUrl(`${api_url}/${data.shortCode}`);
+      if (data.message === "URL already exists in database") {
+        setShortenedUrl(`${api_url}/${data.existingUrl.shortCode}`);
+      } else {
+        setShortenedUrl(`${api_url}/${data.shortCode}`);
+      }
     } catch (error) {
       setError(error.message);
     } finally {
@@ -35,9 +40,23 @@ function App() {
     }
   };
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shortendUrl);
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2 * 1000);
+    } catch (error) {
+      console.error("failed to copy link", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-blue-200 text-black flex flex-col items-center justify-start p-6 gap-6">
-      <h1 className="text-4xl mt-20">URL Shortener</h1>
+      <h1 className="text-5xl text-shadow-lg text-shadow-white mt-20 font-extrabold tracking-wider select-none">
+        Xitly
+      </h1>
       <div className="flex gap-6 items-center justify-center w-full rounded-md p-6 ">
         <input
           value={url}
@@ -55,7 +74,18 @@ function App() {
         </button>
       </div>
       {error && <p className="text-red-500 text-xl">{error}</p>}
-      {shortendUrl}
+      {shortendUrl && (
+        <div className="flex items-center justify-center gap-6">
+          <h1 className="text-2xl font-bold">{shortendUrl}</h1>
+          <button
+            onClick={handleCopy}
+            disabled={isCopied}
+            className="px-4 py-2 bg-blue-400 disabled:bg-blue-300 active:scale-98 hover:bg-blue-500 cursor-pointer text-white"
+          >
+            {isCopied ? "Copied!" : "Copy"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
